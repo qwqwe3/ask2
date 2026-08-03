@@ -53,16 +53,17 @@ jobs:
           DEFAULT_PASSWORD: ${{ secrets.DEFAULT_PASSWORD }}
 
       - name: Set NEXT_PUBLIC_WORKER
+        env:
+          API_CUSTOM_DOMAIN: ${{ secrets.API_CUSTOM_DOMAIN }}
+          DEPLOYMENT_URL: ${{ steps.wrangler-api.outputs.deployment-url }}
         run: |
-          if [ -n "${{ secrets.API_CUSTOM_DOMAIN }}" ]; then
+          if [ -n "$API_CUSTOM_DOMAIN" ]; then
             echo "Custom domain set, using it..."
-            echo "NEXT_PUBLIC_WORKER=${{ secrets.API_CUSTOM_DOMAIN }}" >> $GITHUB_ENV
-            echo "API URL: $NEXT_PUBLIC_WORKER"
+            echo "NEXT_PUBLIC_WORKER=$API_CUSTOM_DOMAIN" >> $GITHUB_ENV
           else
             echo "Custom domain not set, using the API Worker URL..."
-            API_WORKER_URL=${{ steps.wrangler-api.outputs.deployment-url }}
-            echo "NEXT_PUBLIC_WORKER=$API_WORKER_URL" >> $GITHUB_ENV
-            echo "API URL: $API_WORKER_URL"
+            CLEAN_URL=$(echo "$DEPLOYMENT_URL" | grep -oE 'https://[^ ]+' | head -1)
+            echo "NEXT_PUBLIC_WORKER=$CLEAN_URL" >> $GITHUB_ENV
           fi
 
       # Step 7: Deploy Web App to Cloudflare Pages
