@@ -14,7 +14,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: '.ask | Shovon',
   description: 'Ask anything you want to know',
-  metadataBase: new URL('https://ask.shovon.me'),
+  metadataBase: new URL('https://ask-web-9mn.pages.dev'),
+  openGraph: {
+    images: ['/opengraph-image.png'],
+  },
 };
 
 export default function RootLayout({
