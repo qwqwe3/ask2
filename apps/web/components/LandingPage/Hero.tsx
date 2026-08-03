@@ -43,7 +43,7 @@ export default function Hero() {
             </div>
             <motion.div className="flex flex-col items-center text-center" initial={{ y: -20 }} animate={{ y: 0 }} transition={{ delay: 0.2, type: 'spring', stiffness: 120 }}>
               <div className="relative w-24 h-24 rounded-full overflow-hidden ring-4 ring-blue-100 dark:ring-gray-400/60 mb-4">
-                <Image src="https://avatars.githubusercontent.com/u/61104583" alt="Shovon's profile picture" fill className="object-cover" />
+                <Image src="/avatar.png" alt="头像" width={96} height={96} className="object-cover w-full h-full" />
               </div>
               <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
                 <a href="https://x.com/ssskd10" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 dark:hover:text-blue-400 hover:underline underline-offset-4 transition-colors">
