@@ -25,9 +25,11 @@ jobs:
 
       # Step 5: Replace placeholders in wrangler.toml with GitHub Secrets
       - name: Replace wrangler.toml values
+        env:
+          API_CUSTOM_DOMAIN: ${{ secrets.API_CUSTOM_DOMAIN }}
         run: |
-          if [ -n "${{ secrets.API_CUSTOM_DOMAIN }}" ]; then
-            sed -i "s|{{CUSTOM_DOMAIN}}|${{ secrets.API_CUSTOM_DOMAIN }}|g" apps/api/wrangler.toml
+          if [ -n "$API_CUSTOM_DOMAIN" ]; then
+            sed -i "s|{{CUSTOM_DOMAIN}}|$API_CUSTOM_DOMAIN|g" apps/api/wrangler.toml
             sed -i "s|#route|route|g" apps/api/wrangler.toml
           else
             echo "Custom domain not set, skipping..."
