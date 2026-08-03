@@ -12,7 +12,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: '.ask | Shovon',
+  title: '留言提问',
   description: 'Ask anything you want to know',
   metadataBase: new URL('https://ask-web-9mn.pages.dev'),
   openGraph: {
