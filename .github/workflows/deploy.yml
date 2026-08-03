@@ -21,7 +21,7 @@ jobs:
           cache: pnpm
 
       # Step 4: Install dependencies
-      - run: pnpm install
+      - run: pnpm install --no-frozen-lockfile
 
       # Step 5: Replace placeholders in wrangler.toml with GitHub Secrets
       - name: Replace wrangler.toml values
