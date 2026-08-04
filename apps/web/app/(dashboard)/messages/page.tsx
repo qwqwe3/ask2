@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { api } from '@/lib/auth';
 import getAPIUrl from '@/lib/env';
 import { toPng } from 'html-to-image';
-import { Download, ImageIcon, MessageSquare, Share, Share2 } from 'lucide-react';
+import { Download, ImageIcon, MessageSquare, Share, Share2, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import useSWR from 'swr';
@@ -39,7 +39,7 @@ interface DetailedMessage {
 
 export default function AdminDashboard() {
   const fetcher = (url: string) => api.get(url).then((r) => r.data);
-  const { data: response, error, isLoading } = useSWR<ApiResponse>(`${getAPIUrl()}/v1/admin/messages`, fetcher);
+  const { data: response, error, isLoading, mutate } = useSWR<ApiResponse>(`${getAPIUrl()}/v1/admin/messages`, fetcher);
   const [messageDetails, setMessageDetails] = useState<DetailedMessage | null>(null);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [reply, setReply] = useState('');
@@ -122,6 +122,18 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleDelete = async (id: number) => {
+    if (!confirm('确定删除这条留言?此操作不可恢复。')) return;
+     try {
+      await api.delete(`${getAPIUrl()}/v1/admin/messages/${id}`);
+      toast.success('已删除');
+      mutate();
+    } catch (error) {
+      toast.error('删除失败');
+      console.error(error);
+   }
+ };
+
   const MessageCard = ({ message }: { message: Message }) => (
     <Card className={`mb-4 ${message.status === 'unread' && 'border-blue-400 border-[1px]'}  `}>
       <CardHeader className="flex flex-row gap-4 justify-between items-center space-y-2 sm:space-y-0 p-3 sm:p-4">
@@ -138,7 +150,14 @@ export default function AdminDashboard() {
       </CardHeader>
       <CardContent className="p-3 sm:p-4">
         <p className="mb-2 ">{message.message}</p>
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-2">
+          <button
+            className="w-auto text-xs flex items-center gap-2  border border-blue-500 hover:border-blue-600 px-2 py-1 rounded-md"
+            onClick={() => handleDelete(message.id)}
+          >
+            <Trash2 className="size-3" />
+            Delete
+          </button>
           <button
             className="w-auto text-xs flex items-center gap-2  border border-blue-500 hover:border-blue-600 px-2 py-1 rounded-md"
             onClick={() => {
